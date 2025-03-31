@@ -42,8 +42,11 @@ void innit(void){
         "#version 330 core\n"
         "in vec3 vertexColor;\n"  // Eingabe: Farbe aus dem Vertex-Shader
         "in float fragValue;\n"
+        "uniform vec3 fragColor1;\n" // erste fragColor
+        "uniform vec3 fragColor2;\n" // zweite fragColor
         "void main() {\n"
-        "    gl_FragColor = vec4(vertexColor, 1.0);\n"  // Setzt die Farbe des Pixels
+        "    gl_FragColor = vec4(vertexColor * fragValue, 1.0);\n"  // Setzt die Farbe des Pixels
+        "    "
         "}\n"; 
     // Fragment Shader erstellen
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); 
@@ -110,7 +113,8 @@ void innit(void){
    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));  // Farbe
    glEnableVertexAttribArray(1);  // Attribut aktivierenttrib
 
-   glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(4 * sizeof(GLfloat))); // fragValue
+   glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(5 * sizeof(GLfloat))); // fragValue
+   glEnableVertexAttribArray(2); // aktivieren des Attributes 
 
    glBindBuffer(GL_ARRAY_BUFFER, 0);  // Puffer entbinden
    glBindVertexArray(0);  // VAO entbinden
@@ -124,6 +128,12 @@ void innit(void){
 void draw(){
     glClear(GL_COLOR_BUFFER_BIT);
     glUseProgram(program); 
+
+    GLint loc1 = glGetUniformLocation(program, "fragColor1");
+    GLint loc2 = glGetUniformLocation(program, "fragColor2"); 
+    glUniform3f(loc1, 1.0f, 0.0f, 0.0f);
+    glUniform3f(loc2, 0.0f, 1.0f, 0.0f);
+
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, 6); 
 }

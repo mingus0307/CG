@@ -45,8 +45,8 @@ void innit(void){
         "uniform vec3 fragColor1;\n" // erste fragColor
         "uniform vec3 fragColor2;\n" // zweite fragColor
         "void main() {\n"
-        "    gl_FragColor = vec4(vertexColor * fragValue, 1.0);\n"  // Setzt die Farbe des Pixels
-        "    "
+        "    vec3 finalColor = mix(fragColor1, fragColor2, fragValue);\n" // erstellt die richtig Farbe mit übergang
+        "    gl_FragColor = vec4(finalColor, 1.0);\n"  // Setzt die Farbe des Pixels
         "}\n"; 
     // Fragment Shader erstellen
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); 
@@ -86,9 +86,9 @@ void innit(void){
     GLfloat triangles[] = 
     {
         //X         Y        R          G       B           vertValue
-        -0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f,  
-        -0.9f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 
-        0.9f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
+        -0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f,  
+        -0.9f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 
+        0.9f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f,
         // first (pls work)
         -0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
         0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f,
@@ -131,8 +131,8 @@ void draw(){
 
     GLint loc1 = glGetUniformLocation(program, "fragColor1");
     GLint loc2 = glGetUniformLocation(program, "fragColor2"); 
-    glUniform3f(loc1, 1.0f, 0.0f, 0.0f);
-    glUniform3f(loc2, 0.0f, 1.0f, 0.0f);
+    glUniform3f(loc1, 0.0f, 1.0f, 0.0f);
+    glUniform3f(loc2, 1.0f, 0.0f, 0.0f);
 
     glBindVertexArray(vao);
     glDrawArrays(GL_TRIANGLES, 0, 6); 

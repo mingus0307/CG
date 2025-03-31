@@ -46,7 +46,7 @@ void innit(void){
         "uniform vec3 fragColor2;\n" // zweite fragColor
         "void main() {\n"
         //"    vec3 finalColor = mix(fragColor1, fragColor2, step( 0.5f, fragValue));\n" // erstellt die richtig Farbe mit übergang
-        "    vec3 finalColor = mix(fragColor1, fragColor2, smoothstep( 0.0f, 1.0f, fragValue));\n" // erstellt die richtig Farbe mit übergang
+        "    vec3 finalColor = mix(fragColor1, fragColor2, smoothstep( 0.4f, 0.3f, fragValue));\n" // erstellt die richtig Farbe mit übergang
         //    vec3 finalColor = mix(fragColor1, fragColor2, fragValue);\n" // erstellt die richtig Farbe mit übergang
         "    gl_FragColor = vec4(finalColor, 1.0);\n"  // Setzt die Farbe des Pixels
         "}\n"; 

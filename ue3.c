@@ -15,10 +15,13 @@ void innit(void){
         "#version 330 core\n"
         "layout (location = 0) in vec2 aPosition;\n"  // Position der Vertices
         "layout (location = 1) in vec3 aColor;\n"     // Farbe der Vertices lol
+        "layout (location = 2) in float vertValue;\n"
         "out vec3 vertexColor;\n"                     // Gibt die Farbe an den Fragment-Shader weiter
+        "out float fragValue;\n"                      // gibt einen float value an den fragment shader weiter 
         "void main() {\n"
         "    vertexColor = aColor;\n"                   // Setzt die Farbe
         "    gl_Position = vec4(aPosition, 0.0f, 1.0f);\n"  // Setzt die Position im Clipspace, wobei x und y aus der postion kommen und z und w ignoriert werden 
+        "    fragValue = vertValue;\n"                  // setzt den wert gleich dem vertvalue der an den f shader gehen soll
         "}\n"; 
 
     // Vertex Shader erstellen
@@ -38,6 +41,7 @@ void innit(void){
     const char* fragmentText = 
         "#version 330 core\n"
         "in vec3 vertexColor;\n"  // Eingabe: Farbe aus dem Vertex-Shader
+        "in float fragValue;\n"
         "void main() {\n"
         "    gl_FragColor = vec4(vertexColor, 1.0);\n"  // Setzt die Farbe des Pixels
         "}\n"; 
@@ -78,14 +82,14 @@ void innit(void){
     // Dreieecke bauen 
     GLfloat triangles[] = 
     {
-        //X         Y        R          G       B
-        -0.9f, 0.5f, 1.0f, 0.0f, 0.0f,  
-        -0.9f, -0.5f, 1.0f, 0.0f, 0.0f,  
-        0.9f, -0.5f, 1.0f, 0.0f, 0.0f, 
+        //X         Y        R          G       B           vertValue
+        -0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f,  
+        -0.9f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 
+        0.9f, -0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
         // first (pls work)
-        -0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 
-        0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 
-        0.9f, -0.5f, 1.0f, 0.0f, 0.0f,
+        -0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f,
+        0.9f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f,
+        0.9f, -0.5f, 1.0f, 0.0f, 0.0f, 0.0f
     };
     // Vertex Buffer Object (VBO) erstellen
     GLuint triangleVertexBufferObject; 
@@ -100,11 +104,13 @@ void innit(void){
     glBindBuffer(GL_ARRAY_BUFFER, triangleVertexBufferObject);  // VBO binden
 
    // Definieren der Attribut-Positionen im Shader
-   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), 0);  // Position
+   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), 0);  // Position
    glEnableVertexAttribArray(0);  // Attribut aktivieren
 
-   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));  // Farbe
-   glEnableVertexAttribArray(1);  // Attribut aktivieren
+   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));  // Farbe
+   glEnableVertexAttribArray(1);  // Attribut aktivierenttrib
+
+   glVertexAttribPointer(2, 1, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(4 * sizeof(GLfloat))); // fragValue
 
    glBindBuffer(GL_ARRAY_BUFFER, 0);  // Puffer entbinden
    glBindVertexArray(0);  // VAO entbinden

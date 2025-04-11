@@ -83,28 +83,15 @@ void innit(void){
    
     // create triangle buffer
     GLfloat triangleVertices[] = 
-    {   //X         Y       R
-        0.0f, 0.5f,  
-       -0.5f, -0.5f,
-        0.5, -0.5f
+    {   //X    Y     R     G    B
+        0.5f, 0.5f, 1.0f, 1.0f, 0.0f,  
+       -0.5f, -0.5f, 0.7f, 0.0f, 1.0f,  
+        0.5, -0.5f, 0.2f, 1.0f, 0.6f
     }; 
-    GLfloat triangleColor[] = 
-    {
-        //R           G       B
-        1.0f, 1.0f, 0.0f,  
-         0.7f, 0.0f, 1.0f,  
-         0.2f, 1.0f, 0.6f
-    };
-
     GLuint triangleVertexBufferObject; 
-    GLuint triangleVertexBufferObjectColor; 
-    GLuint buffers[] = {triangleVertexBufferObject, triangleVertexBufferObjectColor};
 
-    glGenBuffers(2 ,buffers); 
+    glGenBuffers(1, &triangleVertexBufferObject); 
     glBindBuffer(GL_ARRAY_BUFFER, triangleVertexBufferObject); 
-    glBindBuffer(GL_ARRAY_BUFFER, triangleVertexBufferObjectColor);
-
-    glBufferData(GL_ARRAY_BUFFER, sizeof(triangleColor), triangleColor, GL_STATIC_DRAW);
     glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     

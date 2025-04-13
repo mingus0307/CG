@@ -6,6 +6,7 @@
 GLuint program;
 GLuint vao; 
 
+const int segments = 100; 
 
 void innit(void){
     //copile vertex shader -> geometrie berechnung  
@@ -91,7 +92,7 @@ void innit(void){
     }; 
     // create a circle buffer
 
-    int segments = 20; 
+
     int vertices = segments + 2; // start and middle point 
     GLfloat circleVertices[vertices * 5 ]; // 5 floats for every triangle X->Y->R->B->G
 
@@ -108,7 +109,7 @@ void innit(void){
     float anglestep = 2.0f * M_PI / segments; 
     
     // filling the array 
-    for (int i = 1; i < segments; i++){
+    for (int i = 0; i <= segments; i++){
         float angle = anglestep * i; 
         float x = radius * cos(angle);
         float y = radius * sin(angle);  
@@ -141,7 +142,7 @@ void innit(void){
     glGenVertexArrays(1, &vao);
 
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, triangleVertexBufferObject);
+    glBindBuffer(GL_ARRAY_BUFFER, circleBufferObject);
     glVertexAttribPointer(
             0, 
             2, 
@@ -179,7 +180,7 @@ void draw(void){
     glUseProgram(program);
     
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, 3);  
+    glDrawArrays(GL_TRIANGLE_FAN, 0, segments + 2);  
      
 
 }

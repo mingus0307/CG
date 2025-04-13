@@ -85,54 +85,38 @@ void innit(void){
    
     // create triangle buffer
     GLfloat triangleVertices[] = 
-    {   //X    Y     R     G    B
-        0.0f, 0.5f, 1.0f, 0.0f, 0.0f,  
-       -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,  
-        0.5, -0.5f, 1.0f, 0.0f, 0.0f
+    {   // X         Y
+        // linker Balken
+        -0.5f, 0.5f, 
+        -0.3f, 0.5f, 
+        -0.3f, -0.5f,
+        -0.5f, -0.5f,
+        // querbalken 
+        -0.3f, 0.0f, 
+        0.3f, 0.0f, 
+        0.3f, -0.0f, 
+        -0.3f, -0.0f,
+        // rechter Balken
+        0.5f, 0.5f, 
+        0.3f, 0.5f, 
+        0.3f, -0.5f,
+        0.5f, -0.5f,
+
+        // unterer Balken 
+        -0.5f, -0.7, 
+        0.5f, -0.7, 
+        0.5f, -0.8, 
+        -0.5, -0.8f
     }; 
-    // create a circle buffer
+    glEnable(GL_PRIMITIVE_RESTART);
+    glPrimitiveRestartIndex(9999); 
 
-
-    int vertices = segments + 2; // start and middle point 
-    GLfloat circleVertices[vertices * 5 * 2]; // 5 floats for every triangle X->Y->R->B->G
-
-    // middle point 
-    int offset = 0; 
-    circleVertices[offset++] = 0.0f; 
-    circleVertices[offset++] = 0.0f;
-    circleVertices[offset++] = 1.0f;
-    circleVertices[offset++] = 0.0f; 
-    circleVertices[offset++] = 0.0f; 
-    
-    // edge point calculation 
-    float radius = 0.5f; 
-    float smallRadius = 0.2f; 
-    float anglestep = 2.0f * M_PI / segments; 
-    
-    // filling the array 
-    for (int i = 0; i <= segments; i++){
-        //outter circle 
-        float angle = anglestep * i; 
-        float x = radius * cos(angle);
-        float y = radius * sin(angle);  
-
-        //inner circle 
-        float smallX = smallRadius * cos(angle);
-        float smallY = smallRadius * sin(angle);
-
-        // outter circle into the array
-        circleVertices[offset++] = x;
-        circleVertices[offset++] = y;
-        circleVertices[offset++] = 1.0f; //r
-        circleVertices[offset++] = 0.0f; //g
-        circleVertices[offset++] = 0.0f; //b
-        //inner circle into the array 
-        circleVertices[offset++] = smallX;
-        circleVertices[offset++] = smallY;
-        circleVertices[offset++] = 1.0f; //r
-        circleVertices[offset++] = 0.0f; //g
-        circleVertices[offset++] = 0.0f; //b
-    }
+    GLuint indexes[] = 
+    { 0, 1, 3, 2, 9999, 
+      4, 5, 6, 7, 9999, 
+      8, 9, 11, 10, 9999, 
+      12, 13, 15, 14
+    };
 
 
     // create, bind and upload VBO 
@@ -143,19 +127,13 @@ void innit(void){
     glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
-    // create circle vbo 
-    GLuint circleBufferObject;
-    
-    glGenBuffers(1, &circleBufferObject);
-    glBindBuffer(GL_ARRAY_BUFFER, circleBufferObject);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(circleVertices), circleVertices, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     
     //create vertrex array object 
     glGenVertexArrays(1, &vao);
 
     glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, circleBufferObject);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVertexBufferObject);
     glVertexAttribPointer(
             0, 
             2, 
@@ -181,7 +159,13 @@ void innit(void){
 
     glEnableVertexAttribArray(1);  
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0); 
+    glBindVertexArray(0);
+    
+    // create Element Object Buffer -> ebo 
+    GLuint ebo; 
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW); 
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glViewport(0, 0, 800, 600);
@@ -193,7 +177,7 @@ void draw(void){
     glUseProgram(program);
     
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, (segments + 2)*2);  
+    glDrawArrays(GL_TRIANGLE_STRIP, sizeof()/sizeof(), GL_UNSIGNED_INT, 0);  
      
 
 }

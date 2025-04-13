@@ -94,7 +94,7 @@ void innit(void){
 
 
     int vertices = segments + 2; // start and middle point 
-    GLfloat circleVertices[vertices * 5 ]; // 5 floats for every triangle X->Y->R->B->G
+    GLfloat circleVertices[vertices * 5 * 2]; // 5 floats for every triangle X->Y->R->B->G
 
     // middle point 
     int offset = 0; 
@@ -106,16 +106,29 @@ void innit(void){
     
     // edge point calculation 
     float radius = 0.5f; 
+    float smallRadius = 0.2f; 
     float anglestep = 2.0f * M_PI / segments; 
     
     // filling the array 
     for (int i = 0; i <= segments; i++){
+        //outter circle 
         float angle = anglestep * i; 
         float x = radius * cos(angle);
         float y = radius * sin(angle);  
 
+        //inner circle 
+        float smallX = smallRadius * cos(angle);
+        float smallY = smallRadius * sin(angle);
+
+        // outter circle into the array
         circleVertices[offset++] = x;
         circleVertices[offset++] = y;
+        circleVertices[offset++] = 1.0f; //r
+        circleVertices[offset++] = 0.0f; //g
+        circleVertices[offset++] = 0.0f; //b
+        //inner circle into the array 
+        circleVertices[offset++] = smallX;
+        circleVertices[offset++] = smallY;
         circleVertices[offset++] = 1.0f; //r
         circleVertices[offset++] = 0.0f; //g
         circleVertices[offset++] = 0.0f; //b
@@ -180,7 +193,7 @@ void draw(void){
     glUseProgram(program);
     
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, segments + 2);  
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, (segments + 2) * 2);  
      
 
 }

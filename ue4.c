@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -88,12 +89,53 @@ void innit(void){
        -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,  
         0.5, -0.5f, 1.0f, 0.0f, 0.0f
     }; 
+    // create a circle buffer
+
+    int segments = 20; 
+    int vertices = segments + 2; // start and middle point 
+    GLfloat circleVertices[vertices * 5 ]; // 5 floats for every triangle X->Y->R->B->G
+
+    // middle point 
+    int offset = 0; 
+    circleVertices[offset++] = 0.0f; 
+    circleVertices[offset++] = 0.0f;
+    circleVertices[offset++] = 1.0f;
+    circleVertices[offset++] = 0.0f; 
+    circleVertices[offset++] = 0.0f; 
+    
+    // edge point calculation 
+    float radius = 0.5f; 
+    float anglestep = 2.0f * M_PI / segments; 
+    
+    // filling the array 
+    for (int i = 1; i < segments; i++){
+        float angle = anglestep * i; 
+        float x = radius * cos(angle);
+        float y = radius * sin(angle);  
+
+        circleVertices[offset++] = x;
+        circleVertices[offset++] = y;
+        circleVertices[offset++] = 1.0f; //r
+        circleVertices[offset++] = 0.0f; //g
+        circleVertices[offset++] = 0.0f; //b
+    }
+
+
+    // create, bind and upload VBO 
     GLuint triangleVertexBufferObject; 
 
     glGenBuffers(1, &triangleVertexBufferObject); 
     glBindBuffer(GL_ARRAY_BUFFER, triangleVertexBufferObject); 
     glBufferData(GL_ARRAY_BUFFER, sizeof(triangleVertices), triangleVertices, GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
+
+    // create circle vbo 
+    GLuint circleBufferObject;
+    
+    glGenBuffers(1, &circleBufferObject);
+    glBindBuffer(GL_ARRAY_BUFFER, circleBufferObject);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(circleVertices), circleVertices, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     //create vertrex array object 
     glGenVertexArrays(1, &vao);

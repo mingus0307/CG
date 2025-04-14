@@ -87,26 +87,26 @@ void innit(void){
     GLfloat triangleVertices[] = 
     {   // X         Y
         // linker Balken
-        -0.5f, 0.5f, 
-        -0.3f, 0.5f, 
-        -0.3f, -0.5f,
-        -0.5f, -0.5f,
+        -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 
+        -0.3f, 0.5f, 1.0f, 0.0f, 0.0f,
+        -0.3f, -0.5f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
         // querbalken 
-        -0.3f, 0.0f, 
-        0.3f, 0.0f, 
-        0.3f, -0.0f, 
-        -0.3f, -0.0f,
+        -0.3f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.3f, 0.0f, 1.0f, 0.0f, 0.0f,
+        0.3f, -0.0f, 1.0f, 0.0f, 0.0f,
+        -0.3f, -0.0f,1.0f, 0.0f, 0.0f,
         // rechter Balken
-        0.5f, 0.5f, 
-        0.3f, 0.5f, 
-        0.3f, -0.5f,
-        0.5f, -0.5f,
+        0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
+        0.3f, 0.5f, 1.0f, 0.0f, 0.0f,
+        0.3f, -0.5f,1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f,1.0f, 0.0f, 0.0f,
 
         // unterer Balken 
-        -0.5f, -0.7, 
-        0.5f, -0.7, 
-        0.5f, -0.8, 
-        -0.5, -0.8f
+        -0.5f, -0.7, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.7, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.8, 1.0f, 0.0f, 0.0f,
+        -0.5, -0.8f, 1.0f, 0.0f, 0.0f
     }; 
     glEnable(GL_PRIMITIVE_RESTART);
     glPrimitiveRestartIndex(9999); 
@@ -159,13 +159,14 @@ void innit(void){
 
     glEnableVertexAttribArray(1);  
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    
+
     // create Element Object Buffer -> ebo 
     GLuint ebo; 
     glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW); 
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW);
+    glBindVertexArray(0);
+     
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glViewport(0, 0, 800, 600);
@@ -177,7 +178,8 @@ void draw(void){
     glUseProgram(program);
     
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLE_STRIP, sizeof()/sizeof(), GL_UNSIGNED_INT, 0);  
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, );
+    glDrawElements(GL_TRIANGLE_STRIP, 20, GL_UNSIGNED_INT, 0);  
      
 
 }

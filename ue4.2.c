@@ -5,7 +5,7 @@
 
 GLuint program;
 GLuint vao; 
-
+GLuint ebo; 
 const int segments = 100; 
 
 void innit(void){
@@ -92,10 +92,10 @@ void innit(void){
         -0.3f, -0.5f, 1.0f, 0.0f, 0.0f,
         -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,
         // querbalken 
-        -0.3f, 0.0f, 1.0f, 0.0f, 0.0f,
-        0.3f, 0.0f, 1.0f, 0.0f, 0.0f,
-        0.3f, -0.0f, 1.0f, 0.0f, 0.0f,
-        -0.3f, -0.0f,1.0f, 0.0f, 0.0f,
+        -0.3f, 0.1f, 1.0f, 0.0f, 0.0f,
+        0.3f, 0.1f, 1.0f, 0.0f, 0.0f,
+        0.3f, -0.1f, 1.0f, 0.0f, 0.0f,
+        -0.3f, -0.1f,1.0f, 0.0f, 0.0f,
         // rechter Balken
         0.5f, 0.5f, 1.0f, 0.0f, 0.0f,
         0.3f, 0.5f, 1.0f, 0.0f, 0.0f,
@@ -161,7 +161,7 @@ void innit(void){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // create Element Object Buffer -> ebo 
-    GLuint ebo; 
+
     glGenBuffers(1, &ebo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW);
@@ -178,7 +178,7 @@ void draw(void){
     glUseProgram(program);
     
     glBindVertexArray(vao);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, );
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
     glDrawElements(GL_TRIANGLE_STRIP, 20, GL_UNSIGNED_INT, 0);  
      
 

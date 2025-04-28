@@ -46,7 +46,7 @@ void innit(void){
         "uniform vec3 fragColor2;\n" // zweite fragColor
         "in vec2 xPos;\n"     // zeit 
         "void main() {\n"
-        "      float wave = sin(time * 2.00);\n"
+        "    float wave = sin(time * 2.00);\n"
         //"    vec3 finalColor = mix(fragColor1, fragColor2, step( 0.5f, fragValue));\n" // erstellt einen übergnag in einem begrenzten bereich 
         //"    vec3 finalColor = mix(fragColor1, fragColor2, smoothstep( 0.7f, 0.3f, fragValue));\n" // erstellt einen harten übergang
         //"    vec3 finalColor = mix(fragColor1, fragColor2, fragValue);\n" // erstellt einen mix mit weitem übergang 
